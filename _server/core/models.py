@@ -4,6 +4,7 @@ from django.db import models
 class Person(models.Model):
     name = models.CharField(max_length=255)
     notes = models.JSONField(null=True, blank=True)
+    image = models.ImageField(upload_to='images/', null=True, blank=True)
 
 class Group(models.Model):
     name = models.CharField(max_length=255)
