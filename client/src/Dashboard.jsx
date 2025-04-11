@@ -1,15 +1,7 @@
 import { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 
-
-const router = createHashRouter([
-  {
-    path: "/",
-    element: <Dashboard />,
-  }
-]);
-
-function Dashboard() {
+export function Dashboard() {
   const [count, setCount] = useState(0)
 
   async function logout() {
@@ -42,4 +34,4 @@ function Dashboard() {
   )
 }
 
-export default App;
+

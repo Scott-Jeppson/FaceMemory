@@ -1,3 +1,5 @@
-return (
-    <h1>This is the Group Edit Page!</h1>
-)
+export function GroupEdit() {
+    return (
+        <h1>This is the Group Edit Page!</h1>
+    )
+}

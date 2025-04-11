@@ -1,3 +1,5 @@
-return (
-    <h1>This is the Person View Page!</h1>
-)
+export function PersonView() {
+    return (
+        <h1>This is the Person View Page!</h1>
+    )
+}

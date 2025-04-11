@@ -1,3 +1,5 @@
-return (
-    <h1>This is the Group View Page!</h1>
-)
+   export function GroupView() {
+    return (
+        <h1>This is the Group View Page!</h1>
+    )
+}
