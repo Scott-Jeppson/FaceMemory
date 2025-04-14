@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { createCookieSessionStorage } from "react-router";
+import { Link } from 'react-router-dom'
 
 export function People() {
     const [people, setPeople] = useState([])
@@ -27,9 +27,19 @@ export function People() {
     , [])
 
     return (
-        <div>
-            <h1>This is the People Page!</h1>
-            
+        <div class="pageContent">
+            <Link to="people/new_person">New Person</Link>
+            <h1>People</h1>
+            <div className="people">
+                {people.map((person) => (
+                    <div key={person.id} className="person">
+                        <Link to={`/people/${person.id}`}>
+                            <img src={person.image} alt={person.name} />
+                            <h2>{person.name}</h2>
+                        </Link>
+                    </div>
+                ))}
+            </div>
         </div>
     )   
 }

@@ -41,6 +41,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  justify-content: center;
 }
 
 h1 {
@@ -58,9 +59,11 @@ button {
   background-color: var(--color-secondary);
   cursor: pointer;
   transition: border-color 0.25s;
+  color: var(--color-primary);
 }
 button:hover {
-  border-color: var(--color-primary);
+  border-color: var(--color-primary-hover);
+  color: var(--color-primary-hover);
 }
 button:focus,
 button:focus-visible {
@@ -100,6 +103,7 @@ nav {
   position: fixed;
   top: 0;
   width: 100%;
+  right: -34px;
 }
 
 #title {
@@ -119,9 +123,13 @@ nav {
 
 #outButton {
   margin-right: 1em;
-  color: var(--color-primary);
 }
 
-#outButton:hover {
-  color: var(--color-primary-hover);
+.pageContent {
+  display: flex;
+  flex-direction: column;
+  width: ;
+  margin: 2em auto 0;
+  justify-content: flex-start;
+  background-color: var(--color-secondary);
 }
