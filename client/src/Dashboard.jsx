@@ -21,12 +21,12 @@ export function Dashboard() {
     <>
       <nav className="navBar">
         <div id="title">
-          Face Memory
+          <Link to="/">Face Memory</Link>
         </div>
         <div id="navBarButtons">
           <Link to="/people">People</Link>
           <Link to="/groups">Groups</Link>
-          <button onClick={logout}>Logout</button>
+          <button id="outButton" onClick={logout}>Logout</button>
         </div>
       </nav>
       <Outlet />

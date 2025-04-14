@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { createCookieSessionStorage } from "react-router";
 
 export function People() {
     const [people, setPeople] = useState([])
@@ -9,6 +10,7 @@ export function People() {
                 credentials: "same-origin", // include cookies!
                 headers: {
                     "Content-Type": "application/json",
+                    "X-CSRFToken": cookies.get("csrftoken"),
                 }
             });
 
