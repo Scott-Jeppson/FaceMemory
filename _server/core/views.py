@@ -21,3 +21,51 @@ def index(req):
         "css_file": "" if settings.DEBUG else MANIFEST["src/main.ts"]["css"][0]
     }
     return render(req, "core/index.html", context)
+
+@login_required
+def people(req):
+    pass
+
+@login_required
+def person(req, person_id):
+    pass
+
+@login_required
+def edit_person(req, person_id):
+    pass
+
+@login_required
+def delete_person(req, person_id):
+    pass
+
+@login_required
+def new_person(req):
+    pass
+
+@login_required
+def groups(req):
+    pass
+
+@login_required
+def group(req, group_id):
+    pass
+
+@login_required
+def edit_group(req, group_id):
+    pass
+
+@login_required
+def delete_group(req, group_id):
+    pass
+
+@login_required
+def new_group(req):
+    pass
+
+@login_required
+def add_person_to_group(req, group_id):
+    pass
+
+@login_required
+def remove_person_from_group(req, group_id):
+    pass
