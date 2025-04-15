@@ -128,8 +128,9 @@ nav {
 .pageContent {
   display: flex;
   flex-direction: column;
-  width: ;
-  margin: 2em auto 0;
+  width: 96vw;
+  height: 83vh;
+  margin: 90px 1vw 1vh 1vw;
   justify-content: flex-start;
   background-color: var(--color-secondary);
 }
