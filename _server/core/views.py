@@ -3,6 +3,8 @@ from django.conf  import settings
 import json
 import os
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
 
 # Load manifest when server launches
 MANIFEST = {}
@@ -23,6 +25,10 @@ def index(req):
     return render(req, "core/index.html", context)
 
 @login_required
+def user(req):
+    return JsonResponse({"user": model_to_dict(req.user)})
+
+@login_required
 def people(req):
     pass
 
@@ -40,7 +46,7 @@ def delete_person(req, person_id):
 
 @login_required
 def new_person(req):
-    pass
+   pass 
 
 @login_required
 def groups(req):

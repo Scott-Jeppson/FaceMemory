@@ -1,30 +1,23 @@
 import { useEffect, useState } from "react"
 import { Link } from 'react-router-dom'
+import { getUser } from "../utils/api";
 
 export function People() {
     const [people, setPeople] = useState([])
+    const [user, setUser] = useState(null)
 
     useEffect(() => {
-        async function fetchPeople() {
-            const res = await fetch("/people/", {
-                credentials: "same-origin", // include cookies!
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": cookies.get("csrftoken"),
-                }
-            });
-
-            if (res.ok) {
-                const {people} = await res.json();
-                setPeople(people);
-            } else {
-                // handle fetch failed!
+        async function fetchData() {
+            try {
+                const currentUser = await getUser();
+                setUser(currentUser);
+            } catch (error) {
+                console.error("Error fetching user:", error);
             }
         }
 
-        fetchPeople();
-    }
-    , [])
+        fetchData();
+    }, []);
 
     return (
         <div class="pageContent">
