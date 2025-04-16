@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getUser } from "../utils/api";
+import { getUser } from "../utils/getUser";
 
 export function NewPerson() {
     const [name, setName] = useState('');
@@ -50,6 +50,7 @@ export function NewPerson() {
                         if (response.ok) {
                             const result = await response.json();
                             console.log("Person created successfully:", result);
+                            person = result.
                             window.location.href = "/people";
                         } else {
                             console.error("Failed to create person:", response.statusText);

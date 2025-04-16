@@ -12,6 +12,8 @@ import { GroupView } from './pages/GroupView'
 import './index.css'
 import 'vite/modulepreload-polyfill'
 import { createHashRouter, RouterProvider} from 'react-router-dom'
+import { UserContext } from './context/userContext'
+import { getUser } from './utils/getUser'
 
 const router = createHashRouter([
   {
@@ -58,6 +60,16 @@ const router = createHashRouter([
   }
 ])
 
+function Main() {
+const currentUser = getUser();
+
+  return (
+    <UserContext.Provider value={currentUser}>
+      <RouterProvider router={router} />
+    </UserContext.Provider>
+  )
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <RouterProvider router={router} />
+  <Main />
 )
