@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link } from 'react-router-dom'
-import { getUser } from "../utils/api";
+import { getUser } from "../utils/getUser";
 
 export function People() {
     const [people, setPeople] = useState([])
@@ -21,7 +21,7 @@ export function People() {
 
     return (
         <div class="pageContent">
-            <Link to="people/new_person">New Person</Link>
+            <Link to="/people/new_person">New Person</Link>
             <h1>People</h1>
             <div className="people">
                 {people.map((person) => (

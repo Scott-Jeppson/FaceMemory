@@ -29,7 +29,7 @@ export function NewPerson() {
         <div class="pageContent">
             <div class="header">
                 <h1>New Person</h1>
-                <Link to="people">Cancel</Link>
+                <Link to="/people">Cancel</Link>
             </div>
             <form
                 onSubmit={async (e) => {
@@ -61,6 +61,25 @@ export function NewPerson() {
                 }}
             >
                 <div>
+                    {image ? (
+                        <div>
+                            <p>Selected Image:</p>
+                            <img
+                                src={URL.createObjectURL(image)}
+                                alt="Selected"
+                                style={{ maxWidth: "200px", maxHeight: "200px" }}
+                            />
+                        </div>
+                    ) : (
+                        <div>
+                            <p>No image selected. Using default image:</p>
+                            <img
+                                src="/assets/default-image.png"
+                                alt="Default"
+                                style={{ maxWidth: "200px", maxHeight: "200px" }}
+                            />
+                        </div>
+                    )}
                     <label htmlFor="image">Image:</label>
                     <input
                         type="file"

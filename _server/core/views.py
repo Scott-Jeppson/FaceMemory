@@ -46,7 +46,7 @@ def delete_person(req, person_id):
 
 @login_required
 def new_person(req):
-   pass 
+    pass
 
 @login_required
 def groups(req):
