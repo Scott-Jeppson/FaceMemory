@@ -1,13 +1,19 @@
 :root {
-  --color-primary: #646cff;
-  --color-primary-hover: #535bf2;
-  --color-secondary: #1a1a1a;
-  --color-light: #ffffff;
-  --color-dark: #242424;
-  --color-text-light: rgba(255, 255, 255, 0.87);
-  --color-text-dark: #213547;
-  --color-button-hover: #747bff;
-  --color-shadow: rgba(0, 0, 0, 0.1);
+  /* Dark mode colors */
+  --color-primary-dark: #646cff;
+  --color-button-hover-dark: #535bf2;
+  --color-secondary-dark: #1a1a1a;
+  --color-background-dark: #242424;
+  --color-text-dark: rgba(255, 255, 255, 0.87);
+  --color-shadow-dark: rgba(255, 255, 255, 0.1);
+
+  /* Light mode colors */
+  --color-background-light: #ffffff;
+  --color-text-light: #213547;
+  --color-button-hover-light: #747bff;
+  --color-shadow-light: rgba(0, 0, 0, 0.1);
+  --color-primary-light: #3b82f6;
+  --color-secondary-light: #f9f9f9;
 }
 
 :root {
@@ -16,8 +22,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: var(--color-text-light);
-  background-color: var(--color-dark);
+  color: var(--color-text-dark);
+  background-color: var(--color-background-dark);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -28,11 +34,11 @@
 
 a {
   font-weight: 500;
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
   text-decoration: inherit;
 }
 a:hover {
-  color: var(--color-primary-hover);
+  color: var(--color-primary-hover-dark);
 }
 
 body {
@@ -56,31 +62,18 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: var(--color-secondary);
+  background-color: var(--color-secondary-dark);
   cursor: pointer;
   transition: border-color 0.25s;
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
 }
 button:hover {
-  border-color: var(--color-primary-hover);
-  color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover-dark);
+  color: var(--color-primary-hover-dark);
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: var(--color-text-dark);
-    background-color: var(--color-light);
-  }
-  a:hover {
-    color: var(--color-button-hover);
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
 
 nav {
@@ -89,10 +82,10 @@ nav {
   align-items: center; 
   margin-bottom: 2em;
   padding: 1em;
-  background-color: var(--color-secondary);
+  background-color: var(--color-secondary-dark);
   border-radius: 8px;
-  box-shadow: 0 2px 10px var(--color-shadow);
-  color: var(--color-light);
+  box-shadow: 0 2px 10px var(--color-shadow-dark);
+  color: var(--color-background-dark);
   font-size: 1.2em;
   font-weight: 500;
   text-decoration: none;
@@ -132,5 +125,57 @@ nav {
   min-height: 83vh;
   margin: 90px 1vw 1vh 1vw;
   justify-content: flex-start;
-  background-color: var(--color-secondary);
+  background-color: var(--color-secondary-dark);
+}
+
+.person_image {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  margin-right: 1em;
+  display: block;
+  background-color: var(--color-secondary-dark);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: var(--color-text-light);
+    background-color: var(--color-background-light);
+  }
+  a:hover {
+    color: var(--color-button-hover-light);
+  }
+  button {
+    background-color: var(--color-secondary-light);
+    color: var(--color-primary-light);
+  }
+  button:hover {
+    border-color: var(--color-button-hover-light);
+    color: var(--color-button-hover-light);
+  }
+  nav {
+    background-color: var(--color-secondary-light);
+    color: var(--color-background-light);
+  }
+  .pageContent {
+    background-color: var(--color-secondary-light);
+  }
+  .person_image {
+    background-color: var(--color-secondary-light);
+  }
+  #navBarButtons {
+    background-color: var(--color-secondary-light);
+  }
+  #title {
+    color: var(--color-text-light);
+  }
+  #outButton {
+    background-color: var(--color-secondary-light);
+  }
+  #navBarButtons {
+    background-color: var(--color-secondary-light);
+  }
+  #navBarButtons:hover {
+    background-color: var(--color-button-hover-light);
+  }
 }
