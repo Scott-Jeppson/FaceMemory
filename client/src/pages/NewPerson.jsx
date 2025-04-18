@@ -8,6 +8,15 @@ export function NewPerson() {
     const [details, setDetails] = useState([]);
     const [user, setUser] = useState(null);
     const [groups, setGroups] = useState([]);
+    
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return '';
+    }
+
+    const csrfToken = getCookie('csrftoken');
 
     useEffect(() => {
         async function fetchData() {
@@ -50,8 +59,8 @@ export function NewPerson() {
     }, []);
 
     return (
-        <div class="pageContent">
-            <div class="header">
+        <div className="pageContent">
+            <div className="header">
                 <h1>New Person</h1>
                 <Link to="/people">Cancel</Link>
             </div>
@@ -66,18 +75,19 @@ export function NewPerson() {
                     formData.append("group", e.target.group.value);
 
                     try {
-                        const response = await fetch("/new_person/", {
+                        const response = await fetch("/people/new/", {
                             method: "POST",
+                            headers: {
+                                "X-CSRFToken": csrfToken,
+                            },
                             body: formData,
                             credentials: "same-origin",
-                            user: user,
                         });
 
                         if (response.ok) {
                             const result = await response.json();
                             console.log("Person created successfully:", result);
-                            person = result.
-                            window.location.href = "/people";
+                            window.location.href = "/#/people";
                         } else {
                             console.error("Failed to create person:", response.statusText);
                         }
@@ -130,25 +140,23 @@ export function NewPerson() {
                     <select 
                         id="group" 
                         name="group"
+                        defaultValue= "Select a Group"
                         onChange={(e) => {
                             if (e.target.value === "new_group") {
                                 window.location.href = "/#/groups/new_group";
                             }
                         }}
                     >
-                        <option value="" disabled selected>
-                            Select a group
-                        </option>
                         {groups.map((group) => (
                             <option key={group.id} value={group.id}>
                                 {group.name}
                             </option>
                         ))}
-                        <option in="no_group" value="">
+                        <option id="no_group" value="">
                             No Group
                         </option>
                         <option id="new_group" value="new_group">
-                            <Link to="/groups/new_group">New Group</Link>
+                            Create New Group
                         </option>
                     </select>
                 </div>
