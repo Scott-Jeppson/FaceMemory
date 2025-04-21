@@ -45,7 +45,7 @@ export function NewPerson() {
                 });
     
                 if (response.ok) {
-                    const data = await response.json();
+                    data = await response.json();
                     setGroups(data);
                 } else {
                     console.error("Failed to fetch groups:", response.statusText);
@@ -160,6 +160,7 @@ export function NewPerson() {
                         </option>
                     </select>
                 </div>
+                
                 <div id="details_container">
                 {details.map((detail, index) => (
                     <div key={index}>
