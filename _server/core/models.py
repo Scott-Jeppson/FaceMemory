@@ -10,5 +10,6 @@ class Person(models.Model):
 
 class Group(models.Model):
     name = models.CharField(max_length=255)
+    description = models.TextField(null=True, blank=True)
     members = models.ManyToManyField(Person, related_name='groups')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='people_groups')
