@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link } from 'react-router-dom'
 import { getUser } from "../utils/getUser";
+import { Person } from "../components/Person";
 
 export function People() {
     const [people, setPeople] = useState([])
@@ -22,7 +23,7 @@ export function People() {
     useEffect(() => {
         async function fetchPeople() {
             try {
-                const response = await fetch('/api/people');
+                const response = await fetch('/people');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -44,20 +45,7 @@ export function People() {
                 {people.map((person) => (
                     <div key={person.id} className="person">
                         <Link to={`/people/${person.id}`}>
-                            <img src={person.image} alt={person.name} />
-                            <h2>{person.name}</h2>
-                            <h3>{person.notes ? "Details" : "No Details"}</h3>
-                            {person.notes.slice(0,5).map((note) => (
-                                <p key={note.id} className="note">
-                                    {note.text}
-                                </p>
-                            ))}
-                            <h3>{person.groups ? "Groups" : "Not in Any Groups"}</h3>
-                            {person.groups.slice(0,5).map((group) => (
-                                <p key={group.id} className="group">
-                                    {group.name}
-                                </p>
-                            ))}
+                            <Person person={person} />
                         </Link>
                     </div>
                 ))}

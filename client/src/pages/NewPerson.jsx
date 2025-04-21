@@ -38,7 +38,7 @@ export function NewPerson() {
     useEffect(() => {
         async function fetchGroups() {
             try {                
-                const response = await fetch("/groups/", {
+                const response = await fetch("http://localhost:8000/groups/", {
                     method: "GET",
                     credentials: "same-origin",
                     user: user,
@@ -75,7 +75,7 @@ export function NewPerson() {
                     formData.append("group", e.target.group.value);
 
                     try {
-                        const response = await fetch("/people/new/", {
+                        const response = await fetch("http://localhost:8000/people/new/", {
                             method: "POST",
                             headers: {
                                 "X-CSRFToken": csrfToken,

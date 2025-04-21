@@ -14,6 +14,7 @@ import 'vite/modulepreload-polyfill'
 import { createHashRouter, RouterProvider} from 'react-router-dom'
 import { UserContext } from './context/userContext'
 import { getUser } from './utils/getUser'
+import { FrontPage } from './pages/FrontPage.jsx'
 
 const router = createHashRouter([
   {
@@ -22,7 +23,7 @@ const router = createHashRouter([
     children: [
       {
         path: "/",
-        element: <People />,
+        element: < FrontPage/>,
       },
       {
         path: "/people",
