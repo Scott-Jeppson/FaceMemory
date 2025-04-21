@@ -32,19 +32,84 @@ def user(req):
 
 @login_required
 def people(req):
-    pass
+    if req.method == "Get":
+        people = Person.objects.filter(user=req.user)
+        return JsonResponse(list(people.values()), safe=False)
+    
+    return JsonResponse({"error": "Invalid request method"}, status=400)
 
 @login_required
 def person(req, person_id):
-    pass
+    if req.method == "GET":
+        try:
+            person = Person.objects.get(id=person_id, user=req.user)
+            return JsonResponse({
+                "person": model_to_dict(person),
+                "message": "Person retrieved successfully"
+            }, status=200, safe=False)
+        except Person.DoesNotExist:
+            return JsonResponse({"error": "Person not found"}, status=404)
 
 @login_required
 def edit_person(req, person_id):
-    pass
+    if req.method == "POST":
+        try:
+            person = Person.objects.get(id=person_id, user=req.user)
+        except Person.DoesNotExist:
+            return JsonResponse({"error": "Person not found"}, status=404)
+
+        name = req.POST.get("name")
+        image = req.FILES.get("image")
+        details = req.POST.get("details")
+        groups = req.POST.getlist("groups")
+
+        if name:
+            person.name = name
+        if image:
+            person.image = image
+        if details:
+            try:
+                person.notes = json.loads(details)
+            except json.JSONDecodeError:
+                return JsonResponse({"error": "Invalid details format"}, status=400)
+        if groups:
+            try:
+                group_instances = Group.objects.filter(id__in=groups, user=req.user)
+                person.groups.set(group_instances)
+            except Group.DoesNotExist:
+                return JsonResponse({"error": "Invalid group ID"}, status=400)
+
+        person.save()
+
+        return JsonResponse({
+            "person": model_to_dict(person),
+            "message": "Person updated successfully"
+        }, status=200)
+    
+    return JsonResponse({"error": "Invalid request method"}, status=400)
 
 @login_required
 def delete_person(req, person_id):
-    pass
+    if req.method == "DELETE":
+        try:
+            person = Person.objects.get(id=person_id, user=req.user)
+            person.delete()
+
+            if person.image:
+                image_path = os.path.join(settings.MEDIA_ROOT, str(person.image))
+                if os.path.exists(image_path):
+                    os.remove(image_path)
+            
+            for group in person.groups.all():
+                group.members.remove(person)
+
+            person.groups.clear()
+
+            return JsonResponse({"message": "Person deleted successfully"}, status=200)
+        except Person.DoesNotExist:
+            return JsonResponse({"error": "Person not found"}, status=404)
+
+    return JsonResponse({"error": "Invalid request method"}, status=400)
 
 @login_required
 def new_person(req):
@@ -77,17 +142,15 @@ def new_person(req):
         )
 
         if group_instance:
-            group_instance.members.add(person)
+            person.groups.add(group_instance)
+        
+        person.save()
 
         return JsonResponse({
-            "person": {
-                "id": person.id,
-                "name": person.name,
-                "image": person.image.url if person.image else None,
-                "notes": person.notes,
-            },
-            "message": "Person created successfully"
-        }, status=201)
+            "person": model_to_dict(person),
+            "message": "Person created successfully"},
+            status=201, safe=False
+        )
     else:
         return JsonResponse({"error": "Invalid request method"}, status=400)
 
@@ -100,24 +163,87 @@ def groups(req):
 
 @login_required
 def group(req, group_id):
-    pass
+    if req.method == "GET":
+        try:
+            group = Group.objects.get(id=group_id, user=req.user)
+            return JsonResponse({
+                "group": model_to_dict(group),
+                "message": "Group retireved successfully"},
+                status=200, safe=False)
+        except Group.DoesNotExist:
+            return JsonResponse({"error": "Group not found"}, status=404)
+    return JsonResponse({"error": "Invalid request method"}, status=400)
 
 @login_required
 def edit_group(req, group_id):
-    pass
+    if req.method == "POST":
+        try:
+            group = Group.objects.get(id=group_id, user=req.user)
+        except Group.DoesNotExist:
+            return JsonResponse({"error": "Group not found"}, status=404)
+
+        name = req.POST.get("name")
+        members = req.POST.getlist("members")
+
+        if name:
+            group.name = name
+        if members:
+            try:
+                member_instances = Person.objects.filter(id__in=members, user=req.user)
+                group.members.set(member_instances)
+            except Person.DoesNotExist:
+                return JsonResponse({"error": "Invalid member ID"}, status=400)
+
+        group.save()
+
+        return JsonResponse({
+            "group": model_to_dict(group),
+            "message": "Group updated successfully"
+        }, status=200, safe=False)
+        
+    return JsonResponse({"error": "Invalid request method"}, status=400)
 
 @login_required
 def delete_group(req, group_id):
-    pass
+    if req.method == "DELETE":
+        try:
+            group = Group.objects.get(id=group_id, user=req.user)
+            for person in group.members.all():
+                person.groups.remove(group)
+            
+            group.members.clear()
+            
+            group.delete()
+            return JsonResponse({"message": "Group deleted successfully"}, status=200)
+        except Group.DoesNotExist:
+            return JsonResponse({"error": "Group not found"}, status=404)
+
+    return JsonResponse({"error": "Invalid request method"}, status=400)
 
 @login_required
 def new_group(req):
-    pass
+    if req.method == "POST":
+        name = req.POST.get("name")
+        members = req.POST.getlist("members")
 
-@login_required
-def add_person_to_group(req, group_id):
-    pass
+        if not name:
+            return JsonResponse({"error": "Name is required"}, status=400)
 
-@login_required
-def remove_person_from_group(req, group_id):
-    pass
+        group = Group.objects.create(name=name, user=req.user)
+
+        if members:
+            try:
+                member_instances = Person.objects.filter(id__in=members, user=req.user)
+                group.members.set(member_instances)
+            except Person.DoesNotExist:
+                return JsonResponse({"error": "Invalid member ID"}, status=400)
+
+        group.save()
+
+        return JsonResponse({
+            "group": model_to_dict(group),
+            "message": "Group created successfully"},
+            status=201, safe=False
+        )
+    else:
+        return JsonResponse({"error": "Invalid request method"}, status=400)
