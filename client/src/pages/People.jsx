@@ -20,7 +20,7 @@ export function People() {
     }, []);
 
     return (
-        <div class="pageContent">
+        <div className="pageContent">
             <Link to="/people/new_person">New Person</Link>
             <h1>People</h1>
             <div className="people">
