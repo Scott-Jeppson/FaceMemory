@@ -8,7 +8,7 @@ export function People() {
     const [user, setUser] = useState(null)
 
     useEffect(() => {
-        async function fetchData() {
+        async function fetchUser() {
             try {
                 const currentUser = await getUser();
                 setUser(currentUser);
@@ -17,7 +17,7 @@ export function People() {
             }
         }
 
-        fetchData();
+        fetchUser();
     }, []);
 
     useEffect(() => {
