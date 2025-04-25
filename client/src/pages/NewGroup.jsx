@@ -50,7 +50,7 @@ export function NewGroup() {
             members: members,
         };
 
-        fetch("http://localhost:8000/groups/", {
+        fetch("/groups/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

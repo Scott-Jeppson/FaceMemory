@@ -32,7 +32,7 @@ def user(req):
 
 @login_required
 def people(req):
-    if req.method == "Get":
+    if req.method == "GET":
         people = Person.objects.filter(user=req.user)
         return JsonResponse(list(people.values()), safe=False)
     
@@ -146,8 +146,12 @@ def new_person(req):
         
         person.save()
 
+         # Manually construct the JSON response to handle the image field
+        person_data = model_to_dict(person)
+        person_data["image"] = person.image.url if person.image else None
+
         return JsonResponse({
-            "person": model_to_dict(person),
+            "person": person_data,
             "message": "Person created successfully"},
             status=201, safe=False
         )
