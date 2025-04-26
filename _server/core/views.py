@@ -32,6 +32,7 @@ def user(req):
 
 @login_required
 def people(req):
+    print("==> req.path: ", req.path)
     if req.method == "GET":
         people = Person.objects.filter(user=req.user)
         return JsonResponse(list(people.values()), safe=False)

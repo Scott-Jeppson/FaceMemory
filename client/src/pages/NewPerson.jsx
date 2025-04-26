@@ -110,7 +110,7 @@ export function NewPerson() {
                         <div>
                             <p>No image selected. Using default image: </p>
                             <img className="person_image"
-                                src="/assets/default-image.png"
+                                src="http://localhost:8000/media/default-image.png"
                                 alt="Default"
                                 style={{ maxWidth: "200px", maxHeight: "200px" }}
                             />
