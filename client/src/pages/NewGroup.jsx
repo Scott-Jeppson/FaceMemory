@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getUser } from "../utils/getUser";
+import { PersonSearch } from '../components/PersonSearch';
 
 export function NewGroup() {
     const [name, setName] = useState('');
@@ -97,22 +98,13 @@ export function NewGroup() {
                         onChange={(e) => setDescription(e.target.value)}
                     />
                 </label>
-                <label>
-                    Members:
-                    <ul>
-                        {people.map((person) => (
-                            <li key={person.id}>
-                                {person.name}
-                                <button type="button" onClick={() => addMember(person)}>
-                                    +
-                                </button>
-                                <button type="button" onClick={() => removeMember(person)}>
-                                    -
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                </label>
+                <PersonSearch
+                    people={people}
+                    selection={true}
+                    members={members}
+                    add={addMember}
+                    remove={removeMember}
+                />
                 <button type="submit">Create Group</button>
             </form>
         </div>
