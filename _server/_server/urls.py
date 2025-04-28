@@ -21,12 +21,6 @@ from django.conf.urls.static import static
 from django.views.static import serve
 import os
 
-print("==> DEBUG:", settings.DEBUG)
-print("==> MEDIA_ROOT:", settings.MEDIA_ROOT)
-print("==> MEDIA_URL:", settings.MEDIA_URL)
-print("==> Exists?", os.path.exists(settings.MEDIA_ROOT))
-print("==> Contents:", os.listdir(settings.MEDIA_ROOT) if os.path.exists(settings.MEDIA_ROOT) else "Missing!")
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('registration/', include("registration.urls")),

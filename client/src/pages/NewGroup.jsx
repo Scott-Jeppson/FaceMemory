@@ -43,36 +43,37 @@ export function NewGroup() {
         setMembers((prevMembers) => prevMembers.filter((member) => member !== person));
     }
     
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
+
         const groupData = {
             name: name,
             description: description,
             members: members,
         };
 
-        fetch("/groups/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": csrfToken,
-            },
-            credentials: "same-origin",
-            body: JSON.stringify(groupData),
-        })
-        .then((response) => {
+        try {
+            const response = fetch("/groups/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrfToken,
+                },
+                credentials: "same-origin",
+                body: JSON.stringify(groupData),
+            });
+
             if (response.ok) {
-                return response.json();
+                const response = await response.json();
+                console.log("Group created successfully:", response);
+                window.location.href = "/#/groups";
             } else {
-                throw new Error("Failed to create group");
+                console.error("Failed to create group:", response.statusText);
             }
-        })
-        .then((data) => {
-            console.log("Group created:", data);
-        })
-        .catch((error) => {
-            console.error("Error creating group:", error);
-        });
+        }
+        catch (error) {
+            console.error("Error submitting form:", error);
+        }
     }
 
     return (
@@ -98,7 +99,7 @@ export function NewGroup() {
                         onChange={(e) => setDescription(e.target.value)}
                     />
                 </label>
-                <SearchList
+                <Search
                     items={people}
                     selectedItems={members}
                     selection={true}

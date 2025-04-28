@@ -147,7 +147,7 @@ export function NewPerson() {
                     />
                 </div>
 
-                <SearchList
+                <Search
                     items={groups}
                     selectedItems={selectedGroups}
                     selection={true}
