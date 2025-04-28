@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getUser } from "../utils/getUser";
+import { Search } from '../components/ItemSearch';
 
 export function NewPerson() {
     const [name, setName] = useState('');
@@ -8,6 +9,7 @@ export function NewPerson() {
     const [details, setDetails] = useState([]);
     const [user, setUser] = useState(null);
     const [groups, setGroups] = useState([]);
+    const [selectedGroups, setSelectedGroups] = useState([]);
     
     function getCookie(name) {
         const value = `; ${document.cookie}`;
@@ -33,6 +35,16 @@ export function NewPerson() {
 
     function addDetail() {
         setDetails((prevDetails) => [...prevDetails, { key: '', value: '' }]);
+    }
+
+    function addGroup(group) {
+        if (!selectedGroups.includes(group)) {
+            setSelectedGroups((prevGroups) => [...prevGroups, group]);
+        }
+    }
+
+    function removeGroup(group) {
+        setSelectedGroups((prevGroups) => prevGroups.filter((g) => g !== group));
     }
 
     useEffect(() => {
@@ -135,31 +147,15 @@ export function NewPerson() {
                     />
                 </div>
 
-                <div>
-                    <label htmlFor="group">Group: </label>
-                    <select 
-                        id="group" 
-                        name="group"
-                        defaultValue= "Select a Group"
-                        onChange={(e) => {
-                            if (e.target.value === "new_group") {
-                                window.location.href = "/#/groups/new_group";
-                            }
-                        }}
-                    >
-                        {groups.map((group) => (
-                            <option key={group.id} value={group.id}>
-                                {group.name}
-                            </option>
-                        ))}
-                        <option id="no_group" value="">
-                            No Group
-                        </option>
-                        <option id="new_group" value="new_group">
-                            Create New Group
-                        </option>
-                    </select>
-                </div>
+                <SearchList
+                    items={groups}
+                    selectedItems={selectedGroups}
+                    selection={true}
+                    add={addGroup}
+                    remove={removeGroup}
+                    getItemName={(group) => group.name}
+                    getItemLink={(group) => `/groups/${group.id}`}
+                />
                 
                 <div id="details_container">
                 {details.map((detail, index) => (

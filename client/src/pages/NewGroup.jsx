@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getUser } from "../utils/getUser";
-import { PersonSearch } from '../components/PersonSearch';
+import { Search } from '../components/ItemSearch';
 
 export function NewGroup() {
     const [name, setName] = useState('');
@@ -98,12 +98,14 @@ export function NewGroup() {
                         onChange={(e) => setDescription(e.target.value)}
                     />
                 </label>
-                <PersonSearch
-                    people={people}
+                <SearchList
+                    items={people}
+                    selectedItems={members}
                     selection={true}
-                    members={members}
                     add={addMember}
                     remove={removeMember}
+                    getItemName={(person) => person.name}
+                    getItemLink={(person) => `/people/${person.id}`}
                 />
                 <button type="submit">Create Group</button>
             </form>
