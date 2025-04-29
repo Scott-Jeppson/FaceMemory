@@ -6,9 +6,11 @@ export function Person({
     detailed = false,
     ...props
 }) {
+
+    console.log(person.image);
   return (
     <>
-    <img src={person.image ? `http://localhost:8000/media/${person.image}` : 'http://localhost:8000/media/default-image.png'} alt={person.image ? "Default Image" : person.name} />
+    <img src={person.image ? `http://localhost:8000/${person.image}` : 'http://localhost:8000/default-image.png'} alt={person.image ? person.name : "Default Image"} />
     <h2>{person.name}</h2>
     <h3>{person.notes ? "Details" : "No Details"}</h3>
     {Array.isArray(person.notes) ? (

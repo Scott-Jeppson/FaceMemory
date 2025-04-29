@@ -34,7 +34,12 @@ def user(req):
 def people(req):
     if req.method == "GET":
         people = Person.objects.filter(user=req.user)
-        return JsonResponse(list(people.values()), safe=False)
+        people_data = []
+        for person in people:
+            person_data = model_to_dict(person)
+            person_data["image"] = person.image.url if person.image else None
+            people_data.append(person_data)
+        return JsonResponse(people_data, safe=False)
     
     return JsonResponse({"error": "Invalid request method"}, status=400)
 
@@ -43,8 +48,13 @@ def person(req, person_id):
     if req.method == "GET":
         try:
             person = Person.objects.get(id=person_id, user=req.user)
+            person_data = model_to_dict(person)
+            
+            # Handle the image field
+            person_data["image"] = person.image.url if person.image else None
+
             return JsonResponse({
-                "person": model_to_dict(person),
+                "person": person_data,
                 "message": "Person retrieved successfully"
             }, status=200, safe=False)
         except Person.DoesNotExist:
