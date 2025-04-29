@@ -8,8 +8,6 @@ export function PersonView() {
     const { personId } = useParams(); // Get the id from the URL
     const [person, setPerson] = useState(null);
 
-    console.log(personId);
-
     useEffect(() => {
         async function fetchPerson() {
             try {
@@ -23,7 +21,6 @@ export function PersonView() {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    console.log(data);
                     setPerson(data.person);
                 } else {
                     console.error("Failed to fetch person:", response.statusText);

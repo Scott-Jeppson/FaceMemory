@@ -180,13 +180,22 @@ def group(req, group_id):
     if req.method == "GET":
         try:
             group = Group.objects.get(id=group_id, user=req.user)
+            
+            # Serialize the group object
+            group_data = model_to_dict(group)
+            
+            # Serialize the members (related Person objects)
+            group_data["members"] = [
+                {"id": person.id, "name": person.name, "image": person.image.url if person.image else None}
+                for person in group.members.all()
+            ]
+            
             return JsonResponse({
-                "group": model_to_dict(group),
-                "message": "Group retireved successfully"},
-                status=200, safe=False)
+                "group": group_data,
+                "message": "Group retrieved successfully"
+            }, status=200, safe=False)
         except Group.DoesNotExist:
             return JsonResponse({"error": "Group not found"}, status=404)
-    return JsonResponse({"error": "Invalid request method"}, status=400)
 
 @login_required
 def edit_group(req, group_id):
