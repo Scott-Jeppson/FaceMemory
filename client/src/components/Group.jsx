@@ -1,17 +1,26 @@
+import React from "react";
+import { Link } from "react-router-dom";
+
 export function Group({
     group,
+    detailed = false,
     ...props
 }) {
   return (
     <>
-    <h2>{group.name}</h2>
-    <h3>{group.description || "No Description Given"}</h3>
-    <h3>{group.members ? "Member: " : "Empty"}</h3>
-    {group.members.slice(0,10).map((member) => (
+      <h2>{group.name}</h2>
+      <h3>{group.description ? "Description" : "No Description Given"}</h3>
+      <div className="group_description">
+        {detailed ? group.description : group.description?.slice(0, 100)}
+      </div>
+      <h3>{group.members && group.members.length > 0 ? "Members: " : "No Members"}</h3>
+      {group.members && group.members.length > 0 && (detailed ? group.members : group.members.slice(0, 10)).map((member) => (
         <p key={member.id} className="member">
+          <Link to={`/people/${member.id}`}>
             {member.name}
+          </Link>
         </p>
-    ))}
-  </>
+      ))}
+    </>
   );
 }

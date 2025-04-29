@@ -1,9 +1,11 @@
+import React from "react";
+import { Link } from "react-router-dom";
+
 export function Person({ 
     person,
     detailed = false,
     ...props
 }) {
-    console.log("Person Image:", person.image);
   return (
     <>
     <img src={person.image ? `http://localhost:8000/media/${person.image}` : 'http://localhost:8000/media/default-image.png'} alt={person.image ? "Default Image" : person.name} />
@@ -30,13 +32,17 @@ export function Person({
         detailed ? (
             person.groups.map((group) => (
                 <p key={group.id} className="group">
-                    {group.name}
+                    <Link to={`/groups/${group.id}`}>
+                        {group.name}
+                    </Link>
                 </p>
             ))
         ) : (
             person.groups.slice(0, 5).map((group) => (
                 <p key={group.id} className="group">
-                    {group.name}
+                    <Link to={`/groups/${group.id}`}>
+                        {group.name}
+                    </Link>
                 </p>
             ))
         )

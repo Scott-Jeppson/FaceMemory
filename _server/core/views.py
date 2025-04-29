@@ -32,7 +32,6 @@ def user(req):
 
 @login_required
 def people(req):
-    print("==> req.path: ", req.path)
     if req.method == "GET":
         people = Person.objects.filter(user=req.user)
         return JsonResponse(list(people.values()), safe=False)
@@ -228,8 +227,10 @@ def delete_group(req, group_id):
 @login_required
 def new_group(req):
     if req.method == "POST":
-        name = req.POST.get("name")
-        members = req.POST.getlist("members")
+        data = json.loads(req.body.decode("utf-8"))
+        name = data.get("name")
+        description = data.get("description")
+        members = data.get("members", [])
 
         if not name:
             return JsonResponse({"error": "Name is required"}, status=400)

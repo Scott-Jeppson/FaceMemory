@@ -10,13 +10,22 @@ export function NewGroup() {
     const [people, setPeople] = useState([]);
     const [user, setUser] = useState(getUser());
 
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return '';
+    }
+
+    const csrfToken = getCookie('csrftoken');
+
     useEffect(() => {
         async function fetchPeople() {
             try {
                 const response = await fetch("http://localhost:8000/people/", {
                     method: "GET",
                     credentials: "same-origin",
-                    user: user,
+                    user: user
                 });
 
                 if (response.ok) {
@@ -47,13 +56,13 @@ export function NewGroup() {
         event.preventDefault();
 
         const groupData = {
-            name: name,
-            description: description,
-            members: members,
+            "name": name,
+            "description": description,
+            "members": members.map((member) => member.id)
         };
 
         try {
-            const response = fetch("/groups/", {
+            const res = await fetch("http://localhost:8000/groups/new/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -63,8 +72,8 @@ export function NewGroup() {
                 body: JSON.stringify(groupData),
             });
 
-            if (response.ok) {
-                const response = await response.json();
+            if (res.ok) {
+                const response = await res.json();
                 console.log("Group created successfully:", response);
                 window.location.href = "/#/groups";
             } else {

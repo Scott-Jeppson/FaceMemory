@@ -43,14 +43,14 @@ export function Search({
                         {selectedItems.map((item) => (
                             <div key={item.id} className="searchResult">
                                 <h4>{getItemName(item)}</h4>
-                                <button className="remove_button_" onClick={() => remove(item)}>Remove</button>
+                                <button type="button" className="remove_button_" onClick={() => remove(item)}>Remove</button>
                             </div>
                         ))}
                         <h3>Search Results:</h3>
                         {filteredItems.map((item) => (
                             <div key={item.id} className="searchResult">
                                 <h4>{getItemName(item)}</h4>
-                                <button className="add_button" onClick={() => add(item)}>Add</button>
+                                <button type="button" className="add_button" onClick={() => add(item)}>Add</button>
                             </div>
                         ))}
                     </>
