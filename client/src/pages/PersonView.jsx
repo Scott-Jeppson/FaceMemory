@@ -42,6 +42,7 @@ export function PersonView() {
             <h1>{person.name}</h1>
             <Person person={person} detailed={true} />
             <Link to="/people">Back to People</Link>
+            <Link to={`/people/${personId}/edit`}>Edit Person</Link>
         </div>
     );
 }

@@ -50,8 +50,10 @@ def person(req, person_id):
             person = Person.objects.get(id=person_id, user=req.user)
             person_data = model_to_dict(person)
             
-            # Handle the image field
             person_data["image"] = person.image.url if person.image else None
+            person_data["groups"] = [
+                {"id": group.id, "name": group.name} for group in person.groups.all()
+            ]
 
             return JsonResponse({
                 "person": person_data,
@@ -62,7 +64,7 @@ def person(req, person_id):
 
 @login_required
 def edit_person(req, person_id):
-    if req.method == "POST":
+    if req.method == "PUT":
         try:
             person = Person.objects.get(id=person_id, user=req.user)
         except Person.DoesNotExist:
@@ -100,10 +102,10 @@ def edit_person(req, person_id):
 
 @login_required
 def delete_person(req, person_id):
+    print(f"Request method: {req.method}")  # Debug log
     if req.method == "DELETE":
         try:
             person = Person.objects.get(id=person_id, user=req.user)
-            person.delete()
 
             if person.image:
                 image_path = os.path.join(settings.MEDIA_ROOT, str(person.image))
@@ -114,6 +116,8 @@ def delete_person(req, person_id):
                 group.members.remove(person)
 
             person.groups.clear()
+
+            person.delete()
 
             return JsonResponse({"message": "Person deleted successfully"}, status=200)
         except Person.DoesNotExist:
@@ -127,7 +131,7 @@ def new_person(req):
         name = req.POST.get("name")
         image = req.FILES.get("image")
         details = req.POST.get("details")
-        group = req.POST.get("group")
+        groups = req.POST.getlist("groups")
 
         if not name:
             return JsonResponse({"error": "Name is required"}, status=400)
@@ -137,12 +141,14 @@ def new_person(req):
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid details format"}, status=400)
 
-        group_instance = None
-        if group:
+        group_instances = []
+        if groups:
             try:
-                group_instance = Group.objects.get(id=group, user=req.user)
+                group_instances = Group.objects.filter(id__in=groups, user=req.user)
+                if len(group_instances) != len(groups):
+                    return JsonResponse({"error": "One or more group IDs are invalid"}, status=400)
             except Group.DoesNotExist:
-                return JsonResponse({"error": "Invalid group ID"}, status=400)
+                return JsonResponse({"error": "Invalid group IDs"}, status=400)
 
         person = Person.objects.create(
             name= name,
@@ -151,8 +157,8 @@ def new_person(req):
             user=req.user,
         )
 
-        if group_instance:
-            person.groups.add(group_instance)
+        if group_instances:
+            person.groups.add(*group_instances)
         
         person.save()
 

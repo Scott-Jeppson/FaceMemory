@@ -6,8 +6,6 @@ export function Person({
     detailed = false,
     ...props
 }) {
-
-    console.log(person.image);
   return (
     <>
     <img src={person.image ? `http://localhost:8000/${person.image}` : 'http://localhost:8000/default-image.png'} alt={person.image ? person.name : "Default Image"} />

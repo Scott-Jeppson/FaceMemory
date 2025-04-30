@@ -57,7 +57,7 @@ export function NewPerson() {
                 });
     
                 if (response.ok) {
-                    data = await response.json();
+                    const data = await response.json();
                     setGroups(data);
                 } else {
                     console.error("Failed to fetch groups:", response.statusText);
@@ -84,7 +84,9 @@ export function NewPerson() {
                     formData.append("name", name);
                     formData.append("image", image);
                     formData.append("details", JSON.stringify(details));
-                    formData.append("group", e.target.group.value);
+                    selectedGroups.forEach((group) => {
+                        formData.append("groups", group.id);
+                    });
 
                     try {
                         const response = await fetch("http://localhost:8000/people/new/", {
@@ -109,6 +111,11 @@ export function NewPerson() {
                 }}
             >
                 <div>
+                    <div id="buttons_holder">
+                        <button type="button" onClick={() => addDetail()}>More Details</button>
+                        <button type="submit">Create</button>
+                    </div>
+
                     {image ? (
                         <div>
                             <p>Selected Image: </p>
@@ -147,16 +154,6 @@ export function NewPerson() {
                     />
                 </div>
 
-                <Search
-                    items={groups}
-                    selectedItems={selectedGroups}
-                    selection={true}
-                    add={addGroup}
-                    remove={removeGroup}
-                    getItemName={(group) => group.name}
-                    getItemLink={(group) => `/groups/${group.id}`}
-                />
-                
                 <div id="details_container">
                 {details.map((detail, index) => (
                     <div key={index}>
@@ -183,10 +180,17 @@ export function NewPerson() {
                     </div>
                 ))}
                 </div>
-                <div id="buttons_holder">
-                    <button type="button" onClick={() => addDetail()}>More Details</button>
-                    <button type="submit">Create</button>
-                </div>
+                
+                <Search
+                    items={groups}
+                    selectedItems={selectedGroups}
+                    selection={true}
+                    add={addGroup}
+                    remove={removeGroup}
+                    getItemName={(group) => group.name}
+                    getItemLink={(group) => `/groups/${group.id}`}
+                />
+                
             </form>
         </div>
     )
