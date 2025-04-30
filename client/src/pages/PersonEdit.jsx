@@ -140,8 +140,10 @@ export function PersonEdit() {
                     formData.append("name", name);
                     formData.append("image", image);
                     formData.append("details", JSON.stringify(details));
-                    formData.append("groups", JSON.stringify(selectedGroups.map((group) => group.id)));
-
+                    selectedGroups.forEach((group) => {
+                        formData.append("groups", group.id);
+                    });
+                    
                     try {
                         const response = await fetch(`http://localhost:8000/people/${personId}/edit/`, {
                             method: "PUT",
