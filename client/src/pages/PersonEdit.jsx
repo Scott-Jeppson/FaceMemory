@@ -138,12 +138,13 @@ export function PersonEdit() {
 
                     const formData = new FormData();
                     formData.append("name", name);
-                    formData.append("image", image);
                     formData.append("details", JSON.stringify(details));
-                    selectedGroups.forEach((group) => {
-                        formData.append("groups", group.id);
-                    });
+                    formData.append("groups", JSON.stringify(selectedGroups.map((group) => group.id))); // Send as JSON string
                     
+                    if (typeof image !== "string" && image) {
+                        formData.append("image", image);
+                    }
+
                     try {
                         const response = await fetch(`http://localhost:8000/people/${personId}/edit/`, {
                             method: "PUT",
@@ -156,8 +157,9 @@ export function PersonEdit() {
 
                         if (response.ok) {
                             const result = await response.json();
-                            console.log("Person updated successfully:", result);
-                            window.location.href = `/#/people/${result.id}`;
+                            const updatedPerson = result.person;
+                            console.log("Person updated successfully:", updatedPerson);
+                            window.location.href = `/#/people/${updatedPerson.id}`;
                         } else {
                             console.error("Failed to create person:", response.statusText);
                         }

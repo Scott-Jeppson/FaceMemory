@@ -7,6 +7,9 @@ from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from .models import Person, Group
 from django.contrib.auth.models import User
+from django.http import QueryDict
+import cgi
+from io import BytesIO
 
 # Load manifest when server launches
 MANIFEST = {}
@@ -70,34 +73,73 @@ def edit_person(req, person_id):
         except Person.DoesNotExist:
             return JsonResponse({"error": "Person not found"}, status=404)
 
-        name = req.POST.get("name")
-        image = req.FILES.get("image")
-        details = req.POST.get("details")
-        groups = req.POST.getlist("groups")
+        print("Content-Type:", req.content_type)  # Debug log
 
-        if name:
-            person.name = name
-        if image:
-            person.image = image
-        if details:
-            try:
-                person.notes = json.loads(details)
-            except json.JSONDecodeError:
-                return JsonResponse({"error": "Invalid details format"}, status=400)
-        if groups:
-            try:
+        if req.content_type.startswith("multipart/form-data"):
+            # Parse the multipart form data manually
+            content_type, pdict = cgi.parse_header(req.META['CONTENT_TYPE'])
+            pdict['boundary'] = pdict['boundary'].encode('utf-8')
+            pdict['CONTENT-LENGTH'] = int(req.META['CONTENT_LENGTH'])
+
+            form = cgi.FieldStorage(
+                fp=req,
+                headers=req.META,
+                environ={
+                    'REQUEST_METHOD': 'POST', 
+                    'CONTENT_TYPE': req.META['CONTENT_TYPE']
+                },
+                keep_blank_values=True
+            )
+
+            name = form.getvalue('name')
+            details = form.getvalue('details')
+            image = form['image'] if 'image' in form and form['image'].filename else None
+            groups = form.getvalue('groups')
+
+            print("Name received:", name)
+            print("Details received:", details)
+            print("Groups received:", groups)
+            print("Image received:", image.filename if image else None)
+
+            # Parse JSON fields
+            if details:
+                try:
+                    details = json.loads(details)
+                except Exception:
+                    return JsonResponse({"error": "Invalid details format"}, status=400)
+            if groups:
+                try:
+                    groups = json.loads(groups)
+                except Exception:
+                    groups = []
+
+            # Update the person object
+            if name:
+                person.name = name
+            if image:
+                # Save the new image
+                person.image.save(image.filename, image.file)
+            if details:
+                person.notes = details
+            if groups:
                 group_instances = Group.objects.filter(id__in=groups, user=req.user)
                 person.groups.set(group_instances)
-            except Group.DoesNotExist:
-                return JsonResponse({"error": "Invalid group ID"}, status=400)
+            elif 'groups' in form:
+                person.groups.clear()
 
-        person.save()
+            person.save()
 
-        return JsonResponse({
-            "person": model_to_dict(person),
-            "message": "Person updated successfully"
-        }, status=200)
-    
+            person_data = model_to_dict(person)
+            person_data["image"] = person.image.url if person.image else None
+
+            return JsonResponse({
+                "person": person_data,
+                "message": "Person updated successfully"},
+                status=200, safe=False
+            )
+
+        return JsonResponse({"error": "Unsupported Content-Type"}, status=400)
+
     return JsonResponse({"error": "Invalid request method"}, status=400)
 
 @login_required
