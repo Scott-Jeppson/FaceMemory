@@ -39,8 +39,10 @@ export function People() {
 
     return (
         <div className="pageContent">
-            <Link to="/people/new_person">New Person</Link>
-            <h1>People</h1>
+            <div className="header">
+                <h1>People</h1>
+                <Link to="/people/new_person">New Person</Link>
+            </div>
             <div className="people">
                 {people.map((person) => (
                     <div key={person.id} className="person">

@@ -15,6 +15,8 @@ import { createHashRouter, RouterProvider} from 'react-router-dom'
 import { UserContext } from './context/userContext'
 import { getUser } from './utils/getUser'
 import { FrontPage } from './pages/FrontPage.jsx'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { NotFound } from "./pages/NotFound";
 
 const router = createHashRouter([
   {
@@ -54,8 +56,12 @@ const router = createHashRouter([
         element: <GroupView />,
       },
       {
-        path : "/groups/:groupId/edit",
+        path: "/groups/:groupId/edit",
         element: <GroupEdit />,
+      },
+      {
+        path: "*",
+        element: <NotFound />,
       }
     ]
   }

@@ -3,10 +3,12 @@ import { Link, useParams } from "react-router-dom";
 import { Group } from "../components/Group";
 import { Spinner } from "../components/Loading";
 import { getUser } from "../utils/getUser";
+import { useNavigate } from "react-router-dom";
 
 export function GroupView() {
     const { groupId } = useParams();
     const [group, setGroup] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchGroup() {
@@ -22,8 +24,8 @@ export function GroupView() {
                 if (response.ok) {
                     const data = await response.json();
                     setGroup(data.group);
-                } else {
-                    console.error("Failed to fetch group: ", response.statusText);
+                } else if (response.status === 404) {
+                    navigate("/not-found"); // Redirect to Not Found page
                 }
             } catch (error) {
                 console.error("Error fetching group: ", error);
