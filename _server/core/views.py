@@ -247,28 +247,54 @@ def group(req, group_id):
 
 @login_required
 def edit_group(req, group_id):
-    if req.method == "POST":
+    if req.method == "PUT":
         try:
             group = Group.objects.get(id=group_id, user=req.user)
         except Group.DoesNotExist:
             return JsonResponse({"error": "Group not found"}, status=404)
 
-        name = req.POST.get("name")
-        members = req.POST.getlist("members")
+        data = json.loads(req.body.decode("utf-8"))
+        name = data.get("name")
+        description = data.get("description")
+        members = data.get("members", [])
+
+        print("Name received:", name)
+        print("Members received:", members)
+        print("Description received:", description)
 
         if name:
             group.name = name
+        else :
+            return JsonResponse({"error": "Name is required"}, status=400)
+        if description:
+            group.description = description
+        else:
+            group.description = ''
         if members:
             try:
                 member_instances = Person.objects.filter(id__in=members, user=req.user)
                 group.members.set(member_instances)
             except Person.DoesNotExist:
                 return JsonResponse({"error": "Invalid member ID"}, status=400)
+        elif 'members' in data:
+            group.members.clear()
+
 
         group.save()
 
+        # Manually serialize the group object
+        group_data = {
+            "id": group.id,
+            "name": group.name,
+            "description": group.description,
+            "members": [
+                {"id": person.id, "name": person.name, "image": person.image.url if person.image else None}
+                for person in group.members.all()
+            ]
+        }
+
         return JsonResponse({
-            "group": model_to_dict(group),
+            "group": group_data,
             "message": "Group updated successfully"
         }, status=200, safe=False)
         

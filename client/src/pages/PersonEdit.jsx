@@ -168,11 +168,11 @@ export function PersonEdit() {
                     }
                 }}
             >
+                <div id="buttons_holder">
+                    <button type="button" onClick={() => addDetail()}>More Details</button>
+                    <button type="submit">Save Changes</button>
+                </div>
                 <div>
-                    <div id="buttons_holder">
-                        <button type="button" onClick={() => addDetail()}>More Details</button>
-                        <button type="submit">Save Changes</button>
-                    </div>
 
                     {image && typeof image === "string" ? (
                         <div>
