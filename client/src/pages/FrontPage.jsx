@@ -33,7 +33,7 @@ export function FrontPage() {
         <div className="pageContent">
             <h2>Recent People</h2>
             <div className="people">
-                {people.slice(0, 10).map((person) => (
+                {people.map((person) => (
                     <Link to={`/people/${person.id}`} key={person.id}>
                         <Person person={person} />
                     </Link>
@@ -41,9 +41,9 @@ export function FrontPage() {
             </div>
             <h2>Recent Groups</h2>
             <div className="groups">
-                {groups.slice(0, 10).map((group) => (
+                {groups.map((group) => (
                     <Link to={`/groups/${group.id}`} key={group.id}>
-                        <Group group={group} />
+                        <Group group={group} detailed="false"/>
                     </Link>
                 ))}
             </div>

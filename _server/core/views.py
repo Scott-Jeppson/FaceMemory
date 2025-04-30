@@ -38,10 +38,17 @@ def people(req):
     if req.method == "GET":
         people = Person.objects.filter(user=req.user)
         people_data = []
+
         for person in people:
             person_data = model_to_dict(person)
             person_data["image"] = person.image.url if person.image else None
+            # Serialize the groups (related Group objects)
+            person_data["groups"] = [
+                {"id": group.id, "name": group.name}
+                for group in person.groups.all()
+            ]
             people_data.append(person_data)
+
         return JsonResponse(people_data, safe=False)
     
     return JsonResponse({"error": "Invalid request method"}, status=400)
@@ -220,7 +227,18 @@ def new_person(req):
 def groups(req):
     if req.method == "GET":
         user_groups = Group.objects.filter(user=req.user)
-        return JsonResponse(list(user_groups.values()), safe=False)
+        groups_data = []
+
+        for group in user_groups:
+            group_data = model_to_dict(group)
+            group_data["members"] = [
+                {"id": person.id, "name": person.name, "image": person.image.url if person.image else None}
+                for person in group.members.all()
+            ]
+            groups_data.append(group_data)
+
+        return JsonResponse(groups_data, safe=False)
+    
     return JsonResponse({"error": "Invalid request method"}, status=400)
 
 @login_required
