@@ -191,7 +191,6 @@ nav {
     margin: 0 auto;
     padding: 1em;
     background-color: var(--color-secondary-dark);
-    box-shadow: 0px 10px 15px 15px var(--color-shadow-dark);
     color: var(--color-text-dark);
     min-height: 200px;
     height: auto;
@@ -203,18 +202,26 @@ nav {
     align-items: center;
     justify-content: center;
     color: var(--color-text-dark);
+    box-shadow: 0px 10px 15px 15px var(--color-shadow-dark);
+    padding: 1em;
   }
 
   .people {
     display: flex;
     flex-wrap: nowrap; /* Prevent wrapping */
     justify-content: flex-start; /* Align items to the start */
-    gap: 1em; /* Maintain spacing between child elements */
+    gap: 3em; /* Maintain spacing between child elements */
+    padding: 1em;
     margin-top: 2em;
     overflow-x: auto; /* Enable horizontal scrolling */
     overflow-y: hidden; /* Prevent vertical scrolling */
     height: auto; /* Adjust height to fit content */
     align-items: stretch; /* Ensure child elements maintain their height */
+    flex-shrink: 0; /* Prevent child elements from shrinking */
+  }
+
+  .people > * {
+    flex: 0 0 auto; /* Prevent shrinking and ensure the width is maintained */
   }
 
   .header {
@@ -223,6 +230,48 @@ nav {
     justify-content: space-between;
     padding-left: 1em;
     padding-right: 1em;
+  }
+
+  .groups {
+    display: flex;
+    flex-wrap: nowrap; /* Prevent wrapping */
+    justify-content: flex-start; /* Align items to the start */
+    gap: 3em; /* Maintain spacing between child elements */
+    padding: 1em;
+    margin-top: 2em;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    overflow-y: hidden; /* Prevent vertical scrolling */
+    height: auto; /* Adjust height to fit content */
+    align-items: stretch; /* Ensure child elements maintain their height */
+    flex-shrink: 0; /* Prevent child elements from shrinking */
+  }
+
+  .groups > * {
+    flex: 0 0 auto; /* Prevent shrinking and ensure the width is maintained */
+  }
+
+  .group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0 auto;
+    padding: 1em;
+    background-color: var(--color-secondary-dark);
+    color: var(--color-text-dark);
+    min-height: 200px;
+    height: auto;
+    width: auto;
+  }
+
+  .group_inside {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-dark);
+    box-shadow: 0px 10px 15px 15px var(--color-shadow-dark);
+    padding: 1em;
   }
 
 @media (prefers-color-scheme: light) {

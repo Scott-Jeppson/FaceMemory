@@ -31,16 +31,16 @@ export function FrontPage() {
 
     return (
         <div className="pageContent">
+            <h2>Recent People</h2>
             <div className="people">
-                <h2>Recent People</h2>
                 {people.slice(0, 10).map((person) => (
                     <Link to={`/people/${person.id}`} key={person.id}>
                         <Person person={person} />
                     </Link>
                 ))}
             </div>
+            <h2>Recent Groups</h2>
             <div className="groups">
-                <h2>Recent Groups</h2>
                 {groups.slice(0, 10).map((group) => (
                     <Link to={`/groups/${group.id}`} key={group.id}>
                         <Group group={group} />

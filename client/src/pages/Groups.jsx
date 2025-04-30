@@ -29,8 +29,10 @@ export function Groups() {
 
     return (
         <div className="pageContent">
-            <Link to="/groups/new_group">New Group</Link>
-            <h1>Groups</h1>
+            <div className="header">
+                <h1>Groups</h1>
+                <Link to="/groups/new_group">New Group</Link>
+            </div>
             {loading ? (
                 <p>Loading...</p>
             ) : (

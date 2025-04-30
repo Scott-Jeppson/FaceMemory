@@ -7,20 +7,20 @@ export function Group({
     ...props
 }) {
   return (
-    <>
-      <h2>{group.name}</h2>
-      <h3>{group.description ? "Description" : "No Description Given"}</h3>
-      <div className="group_description">
-        {detailed ? group.description : group.description?.slice(0, 100)}
-      </div>
-      <h3>{group.members && group.members.length > 0 ? "Members: " : "No Members"}</h3>
-      {group.members && group.members.length > 0 && (detailed ? group.members : group.members.slice(0, 10)).map((member) => (
-        <p key={member.id} className="member">
-          <Link to={`/people/${member.id}`}>
-            {member.name}
-          </Link>
-        </p>
-      ))}
-    </>
+    <div className="group_inside">
+        <h2>{group.name}</h2>
+        <h3>{group.description ? "Description:" : "No Description Given"}</h3>
+        <div className="group_description">
+          {detailed ? group.description : group.description?.slice(0, 100)}
+        </div>
+        <h3>{group.members && group.members.length > 0 ? "Members: " : "No Members"}</h3>
+        {group.members && group.members.length > 0 && (detailed ? group.members : group.members.slice(0, 10)).map((member) => (
+          <p key={member.id} className="member">
+            <Link to={`/people/${member.id}`}>
+              {member.name}
+            </Link>
+          </p>
+        ))}
+    </div>
   );
 }
